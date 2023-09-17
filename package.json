@@ -1,0 +1,13 @@
+{
+  "name": "com.djm.event-manager",
+  "version": "1.0.0",
+  "displayName": "DJM Event Manager",
+  "description": "C# Event Manager for Unity.",
+  "dependencies": {
+  },
+  "author": {
+    "name": "danjm.dev",
+    "email": "danjm.dev@gmail.com",
+    "url": "https://github.com/danjm-dev"
+  }
+}
