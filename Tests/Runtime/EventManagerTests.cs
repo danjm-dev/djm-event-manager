@@ -8,12 +8,12 @@ namespace DJM.EventManager.Tests
     [TestFixture]
     internal sealed class EventManagerTests
     {
-        private EventManagerService _eventManagerService;
+        private EventManager _eventManager;
         
         [SetUp]
         public void SetUp()
         {
-            _eventManagerService = new EventManagerService();
+            _eventManager = new EventManager();
         }
 
 
@@ -24,7 +24,7 @@ namespace DJM.EventManager.Tests
             var expectedErrorMessage = ErrorMessages.NullListenerSubscribed(typeof(EmptyStructEvent));
             
             // act
-            _eventManagerService.Subscribe<EmptyStructEvent>(null);
+            _eventManager.Subscribe<EmptyStructEvent>(null);
             
             // assert
             LogAssert.Expect(LogType.Error, expectedErrorMessage);
@@ -36,7 +36,7 @@ namespace DJM.EventManager.Tests
             var expectedErrorMessage = ErrorMessages.NullListenerSubscribed(typeof(Vector2));
             
             // act
-            _eventManagerService.Subscribe<Vector2>(null);
+            _eventManager.Subscribe<Vector2>(null);
             
             // assert
             LogAssert.Expect(LogType.Error, expectedErrorMessage);
@@ -51,8 +51,8 @@ namespace DJM.EventManager.Tests
             Action<EmptyStructEvent> listener = _ => called = true;
             
             // act
-            _eventManagerService.Subscribe(listener);
-            _eventManagerService.TriggerEvent(new EmptyStructEvent());
+            _eventManager.Subscribe(listener);
+            _eventManager.TriggerEvent(new EmptyStructEvent());
     
             // assert
             Assert.AreEqual(true, called);
@@ -65,8 +65,8 @@ namespace DJM.EventManager.Tests
             Action<Vector2> listener = (vec2) => callbackValue = vec2;
             
             // act
-            _eventManagerService.Subscribe(listener);
-            _eventManagerService.TriggerEvent(Vector2.one);
+            _eventManager.Subscribe(listener);
+            _eventManager.TriggerEvent(Vector2.one);
     
             // assert
             Assert.AreEqual(Vector2.one, callbackValue);
@@ -81,9 +81,9 @@ namespace DJM.EventManager.Tests
             Action<EmptyStructEvent> listener = _ => called = true;
             
             // act
-            _eventManagerService.Subscribe(listener);
-            _eventManagerService.Unsubscribe(listener);
-            _eventManagerService.TriggerEvent(new EmptyStructEvent());
+            _eventManager.Subscribe(listener);
+            _eventManager.Unsubscribe(listener);
+            _eventManager.TriggerEvent(new EmptyStructEvent());
     
             // assert
             Assert.AreEqual(false, called);
@@ -96,9 +96,9 @@ namespace DJM.EventManager.Tests
             Action<Vector2> listener = (vec2) => callbackValue = vec2;
             
             // act
-            _eventManagerService.Subscribe(listener);
-            _eventManagerService.Unsubscribe(listener);
-            _eventManagerService.TriggerEvent(Vector2.one);
+            _eventManager.Subscribe(listener);
+            _eventManager.Unsubscribe(listener);
+            _eventManager.TriggerEvent(Vector2.one);
     
             // assert
             Assert.AreEqual(Vector2.zero, callbackValue);
@@ -112,10 +112,10 @@ namespace DJM.EventManager.Tests
             Action<EmptyStructEvent> listener = _ => { };
             
             // act
-            _eventManagerService.Unsubscribe(listener);
+            _eventManager.Unsubscribe(listener);
     
             // assert
-            Assert.DoesNotThrow(() => _eventManagerService.Unsubscribe(listener));
+            Assert.DoesNotThrow(() => _eventManager.Unsubscribe(listener));
         }
         [Test]
         public void UnsubscribeWithoutSubscribing_Vector2Event_ValidListener_ShouldNotThrow()
@@ -124,29 +124,29 @@ namespace DJM.EventManager.Tests
             Action<Vector2> listener = (vec2) => _ = vec2;
             
             // act
-            _eventManagerService.Unsubscribe(listener);
+            _eventManager.Unsubscribe(listener);
     
             // assert
-            Assert.DoesNotThrow(() => _eventManagerService.Unsubscribe(listener));
+            Assert.DoesNotThrow(() => _eventManager.Unsubscribe(listener));
         }
         
         
         [Test]
         public void TriggerEvent_EmptyStructEvent_NoSubscribers_ShouldNotThrow()
         {
-            Assert.DoesNotThrow(() => _eventManagerService.TriggerEvent(new EmptyStructEvent()));
+            Assert.DoesNotThrow(() => _eventManager.TriggerEvent(new EmptyStructEvent()));
         }
         [Test]
         public void TriggerEvent_Vector2Event_NoSubscribers_ShouldNotThrow()
         {
-            Assert.DoesNotThrow(() => _eventManagerService.TriggerEvent(Vector2.one));
+            Assert.DoesNotThrow(() => _eventManager.TriggerEvent(Vector2.one));
         }
         
         
         [Test]
         public void Reset_EmptyStructEvent_NoSubscribers_ShouldNotThrow()
         {
-            Assert.DoesNotThrow(() => _eventManagerService.ClearAllEvents());
+            Assert.DoesNotThrow(() => _eventManager.ClearAllEvents());
         }
         
         
@@ -162,15 +162,15 @@ namespace DJM.EventManager.Tests
             Action<EmptyStructEvent> emptyStructEventListener = _ => emptyStructCalled = true;
             Action<ValueStructEvent> valueStructEventListener = (valueStruct) => valueStructCallBackValue = valueStruct.Value;
             
-            _eventManagerService.Subscribe(vec2Listener);
-            _eventManagerService.Subscribe(emptyStructEventListener);
-            _eventManagerService.Subscribe(valueStructEventListener);
+            _eventManager.Subscribe(vec2Listener);
+            _eventManager.Subscribe(emptyStructEventListener);
+            _eventManager.Subscribe(valueStructEventListener);
             
             // act
-            _eventManagerService.ClearAllEvents();
-            _eventManagerService.TriggerEvent(Vector2.one);
-            _eventManagerService.TriggerEvent(new EmptyStructEvent());
-            _eventManagerService.TriggerEvent(new ValueStructEvent(1));
+            _eventManager.ClearAllEvents();
+            _eventManager.TriggerEvent(Vector2.one);
+            _eventManager.TriggerEvent(new EmptyStructEvent());
+            _eventManager.TriggerEvent(new ValueStructEvent(1));
             
             // assert
             Assert.AreEqual(Vector2.zero, vec2CallbackValue);
@@ -182,12 +182,12 @@ namespace DJM.EventManager.Tests
         [Test]
         public void RemoveEvent_EmptyStructEvent_NoSubscribers_ShouldNotThrow()
         {
-            Assert.DoesNotThrow(() => _eventManagerService.ClearEvent<EmptyStructEvent>());
+            Assert.DoesNotThrow(() => _eventManager.ClearEvent<EmptyStructEvent>());
         }
         [Test]
         public void RemoveEvent_Vector2Event_NoSubscribers_ShouldNotThrow()
         {
-            Assert.DoesNotThrow(() => _eventManagerService.TriggerEvent(Vector2.one));
+            Assert.DoesNotThrow(() => _eventManager.TriggerEvent(Vector2.one));
         }
         
         
@@ -203,15 +203,15 @@ namespace DJM.EventManager.Tests
             Action<EmptyStructEvent> emptyStructEventListener = _ => emptyStructCalled = true;
             Action<ValueStructEvent> valueStructEventListener = (valueStruct) => valueStructCallBackValue = valueStruct.Value;
             
-            _eventManagerService.Subscribe(vec2Listener);
-            _eventManagerService.Subscribe(emptyStructEventListener);
-            _eventManagerService.Subscribe(valueStructEventListener);
+            _eventManager.Subscribe(vec2Listener);
+            _eventManager.Subscribe(emptyStructEventListener);
+            _eventManager.Subscribe(valueStructEventListener);
             
             // act
-            _eventManagerService.ClearEvent<EmptyStructEvent>();
-            _eventManagerService.TriggerEvent(Vector2.one);
-            _eventManagerService.TriggerEvent(new EmptyStructEvent());
-            _eventManagerService.TriggerEvent(new ValueStructEvent(1));
+            _eventManager.ClearEvent<EmptyStructEvent>();
+            _eventManager.TriggerEvent(Vector2.one);
+            _eventManager.TriggerEvent(new EmptyStructEvent());
+            _eventManager.TriggerEvent(new ValueStructEvent(1));
             
             // assert
             Assert.AreEqual(Vector2.one, vec2CallbackValue);
@@ -230,15 +230,15 @@ namespace DJM.EventManager.Tests
             Action<EmptyStructEvent> emptyStructEventListener = _ => emptyStructCalled = true;
             Action<ValueStructEvent> valueStructEventListener = (valueStruct) => valueStructCallBackValue = valueStruct.Value;
             
-            _eventManagerService.Subscribe(vec2Listener);
-            _eventManagerService.Subscribe(emptyStructEventListener);
-            _eventManagerService.Subscribe(valueStructEventListener);
+            _eventManager.Subscribe(vec2Listener);
+            _eventManager.Subscribe(emptyStructEventListener);
+            _eventManager.Subscribe(valueStructEventListener);
             
             // act
-            _eventManagerService.ClearEvent<Vector2>();
-            _eventManagerService.TriggerEvent(Vector2.one);
-            _eventManagerService.TriggerEvent(new EmptyStructEvent());
-            _eventManagerService.TriggerEvent(new ValueStructEvent(1));
+            _eventManager.ClearEvent<Vector2>();
+            _eventManager.TriggerEvent(Vector2.one);
+            _eventManager.TriggerEvent(new EmptyStructEvent());
+            _eventManager.TriggerEvent(new ValueStructEvent(1));
             
             // assert
             Assert.AreEqual(Vector2.zero, vec2CallbackValue);

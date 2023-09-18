@@ -62,12 +62,12 @@ namespace DJM.EventManager
             }
         }
         
-        public void ClearAllEvents() => _eventDictionary.Clear();
-        
         public void ClearEvent<T>() where T : struct
         {
             var eventId = typeof(T);
             _eventDictionary.Remove(eventId);
         }
+        
+        public void ClearAllEvents() => _eventDictionary.Clear();
     }
 }
