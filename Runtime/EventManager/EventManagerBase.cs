@@ -8,7 +8,7 @@ namespace DJM.EventManager
     /// Base abstract event manager implementation for classes implementing <see cref="IEventManager"/>.
     /// Each event is identified by a struct type, which is also used as the event parameter for subscribed listeners.
     /// </summary>
-    public abstract class EventManagerServiceBase : IEventManager
+    public abstract class EventManagerBase
     {
         private readonly Dictionary<Type, Delegate> _eventDictionary = new();
 
