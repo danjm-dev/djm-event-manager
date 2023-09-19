@@ -9,10 +9,10 @@
     <img src="https://i.imgur.com/dmkwuPo.png" alt="Logo" width="80" height="80">
   </a>
 
-<h3 align="center">DJM Event Manager Package</h3>
+<h3 align="center">DJM Event Manager</h3>
 
   <p align="center">
-    C# Event Manager for Unity.
+    C# event manager package for Unity.
     <br />
     <a href="https://github.com/danjm-dev/djm-event-manager"><strong>Explore the docs »</strong></a>
     <br />
